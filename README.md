@@ -2,6 +2,10 @@
 
 A modern mobile social media application built with React Native and **Supabase**, allowing users to share photos and moments with their friends.
 
+## 🌐 Live Demo
+
+Try the app instantly in your browser: [**Launch Live Demo**](https://appetize.io/app/b_wogo6k4bfxlhnrvsceouvivbt4)
+
 ## 🎯 Features
 
 ### Core Features

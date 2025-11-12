@@ -61,13 +61,13 @@ export default function CreatePostScreen({ navigation }) {
         .eq('id', user.uid)
         .single();
 
-      // If profile doesn't exist, create it
+      // If profile doesn't exist, create it with upsert to handle duplicates
       if (profileCheckError || !existingProfile) {
         const username = user.displayName || user.email?.split('@')[0] || `user_${user.uid.slice(0, 8)}`;
         
-        const { error: profileInsertError } = await supabase
+        const { error: profileUpsertError } = await supabase
           .from('profiles')
-          .insert([
+          .upsert([
             {
               id: user.uid,
               username: username,
@@ -75,27 +75,13 @@ export default function CreatePostScreen({ navigation }) {
               avatar_url: user.photoURL || null,
               bio: null,
             },
-          ]);
+          ], {
+            onConflict: 'id',
+            ignoreDuplicates: false,
+          });
 
-        if (profileInsertError) {
-          // If insert fails, try upsert in case of race condition
-          const { error: profileUpsertError } = await supabase
-            .from('profiles')
-            .upsert([
-              {
-                id: user.uid,
-                username: username,
-                full_name: user.displayName || null,
-                avatar_url: user.photoURL || null,
-                bio: null,
-              },
-            ], {
-              onConflict: 'id',
-            });
-
-          if (profileUpsertError) {
-            throw new Error(`Profile creation failed: ${profileUpsertError.message}`);
-          }
+        if (profileUpsertError && !profileUpsertError.message.includes('duplicate key')) {
+          throw new Error(`Profile creation failed: ${profileUpsertError.message}`);
         }
       }
 

@@ -26,7 +26,8 @@
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.READ_EXTERNAL_STORAGE",
-        "android.permission.WRITE_EXTERNAL_STORAGE"
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO"
       ]
     },
     "web": {
@@ -39,6 +40,11 @@
           "photosPermission": "The app needs access to your photos to let you share images."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "86bb508b-68a2-4b0e-aa03-018b47eb7e89"
+      }
+    }
   }
 }
